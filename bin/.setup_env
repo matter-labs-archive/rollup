@@ -1,0 +1,38 @@
+#!/bin/bash
+
+if [ -z "$FRANKLIN_ENV" ]
+then
+
+    cd `dirname $0`/..
+
+    if [ -f etc/env/current ]; then
+        export FRANKLIN_ENV=`cat etc/env/current`
+    else 
+        export FRANKLIN_ENV=dev
+    fi
+
+    export ENV_FILE=./etc/env/$FRANKLIN_ENV.env
+
+    if [ "dev" == "$FRANKLIN_ENV" ] && [ ! -f etc/env/dev.env ]
+    then
+        cp etc/env/dev.env.example etc/env/dev.env
+    fi
+
+    if [ ! -f $ENV_FILE ]; then
+        echo "Franklin config file not found: $ENV_FILE"
+        #exit
+    fi
+
+    # Load env vars
+    set -o allexport
+    eval $(grep -v '^#' $ENV_FILE | sed 's/^/export /')
+    set +o allexport
+
+    # Postprocessing for all configs
+
+    export KUBECONFIG=etc/kube/clusters/kubeconfig-main.yaml
+
+    # if [[ $FIXMODE ]]; then
+    #     export WEB3_URL=http://localhost:8545
+    # fi
+fi

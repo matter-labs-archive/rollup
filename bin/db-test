@@ -1,0 +1,14 @@
+#!/bin/bash
+
+. .setup_env
+cd core/storage
+
+export DATABASE_URL=postgres://postgres@localhost/plasma_test
+
+if [ "$1" == "reset" ]; then
+    diesel database reset
+    diesel migration run
+fi
+
+cd ../..
+cargo test -p storage
