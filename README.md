@@ -1,4 +1,4 @@
-# FRANKLIN: Matter Labs' Rollup: sidechain governed by SNARKs
+# FRANKLIN: Matter Labs' Rollup: commit-chain driven by SNARKs
 
 # Basics
 
